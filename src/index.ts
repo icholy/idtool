@@ -2,7 +2,7 @@
 import ID from '@compassdigital/id';
 import yargs from 'yargs/yargs';
 import { hideBin } from 'yargs/helpers';
-import fetch, { Headers } from 'node-fetch';
+import { Ap3Client } from './client';
 
 // main is the entry point for the program. It's responsible for parsing command
 // line flags and dispatching to the appropriate functions.
@@ -43,7 +43,7 @@ async function main(): Promise<void> {
         .argv;
     // create a client and use it to fetch the id's json
     const client = new Ap3Client(argv.username, argv.password, argv.env);
-
+    // treat each positional argument as an id
     for (const encoded of argv._) {
         try {
             const id = ID(encoded.toString());
@@ -64,52 +64,3 @@ async function main(): Promise<void> {
 
 // kick off main
 (async () => await main())();
-
-interface LoginResponse {
-    user: string;
-    token: string;
-}
-
-class Ap3Client {
-
-    private token?: LoginResponse;;
-
-    constructor(
-        private username: string,
-        private password: string,
-        private env = "dev"
-    ) {}
-
-    // login authenticates using the username/password provided to the constructor and saves
-    // the token to a property. This method gets called automatically as needed.
-    private async login(): Promise<void> {
-        const realm = ID("user", "cdl", "realm", "cdl");
-        const auth = Buffer.from(`${this.username}:${this.password}`).toString("base64");
-        const headers = { "Authorization": `Basic ${auth}` };
-        const response = await fetch(`https://api.compassdigital.org/${this.env}/user/auth?realm=${realm}`, { headers });
-        if (!response.ok) {
-            throw new Error(await response.text());
-        }
-        this.token = await response.json();
-    }
-
-    // fetch the resource pointed to by the provided id. The decoded id must have the id property set.
-    async fetch<ResponseData = any>(id: cdl.DecodedID, query?: string): Promise<ResponseData> {
-        if (!id.id) {
-            throw new Error("missing id property");
-        }
-        if (!this.token) {
-            await this.login();
-        }
-        const headers = { "Authorization": `Bearer ${this.token}` };
-        let url = `https://api.compassdigital.org/${this.env}/${id.service}/${id.type}/${id.id}`;
-        if (query) {
-            url += `?_query=${encodeURIComponent(query)}`;
-        }
-        const response = await fetch(url, { headers });
-        if (!response.ok) {
-            throw new Error(await response.text());
-        }
-        return response.json();
-    }
-}
