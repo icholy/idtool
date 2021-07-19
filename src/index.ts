@@ -32,13 +32,19 @@ async function main(): Promise<void> {
         .options('query', {
             alias: 'q',
             type: 'string',
-            description: 'Graphql query to augment the response'
+            description: 'Graphql query to augment the response',
         })
         .options('format', {
             alias: 'f',
             type: 'boolean',
             description: "Format json before outputting",
-            default: true
+            default: true,
+        })
+        .options('info', {
+            alias: 'i',
+            type: 'boolean',
+            description: "Output id properties",
+            default: false,
         })
         .argv;
     // create a client and use it to fetch the id's json
@@ -48,6 +54,10 @@ async function main(): Promise<void> {
         try {
             const id = ID(encoded.toString());
             if (!id) {
+                throw new Error("invalid id");
+            }
+            if (argv.info) {
+                console.log(`${encoded}: service=${id.service}, provider=${id.provider}, type=${id.type}, id=${id.id}`);
                 continue;
             }
             const data = await client.fetch(id, argv.query);
