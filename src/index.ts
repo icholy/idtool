@@ -49,6 +49,13 @@ async function main(): Promise<void> {
         .argv;
     // create a client and use it to fetch the id's json
     const client = new Ap3Client(argv.username, argv.password, argv.env);
+    // authenticate
+    try {
+        await client.login();
+    } catch (err) {
+        console.log("login failed", err.message);
+        return;
+    }
     // treat each positional argument as an id
     for (const encoded of argv._) {
         try {
@@ -57,7 +64,7 @@ async function main(): Promise<void> {
                 throw new Error("invalid id");
             }
             if (argv.info) {
-                console.log(`${encoded}: service=${id.service}, provider=${id.provider}, type=${id.type}, id=${id.id}`);
+                console.log(`service=${id.service}, provider=${id.provider}, type=${id.type}, id=${id.id}, raw=${encoded}`);
                 continue;
             }
             const data = await client.fetch(id, argv.query);
@@ -67,7 +74,7 @@ async function main(): Promise<void> {
                 console.log(JSON.stringify(data))
             }
         } catch (err) {
-            console.error("error", encoded, err);
+            console.error("error", encoded, err.message);
         }
     }
 }

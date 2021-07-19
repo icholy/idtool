@@ -17,8 +17,8 @@ export class Ap3Client {
     ) {}
 
     // login authenticates using the username/password provided to the constructor and saves
-    // the token to a property. This method gets called automatically as needed.
-    private async login(): Promise<void> {
+    // the token to a property.
+    async login(): Promise<void> {
         const realm = ID("user", "cdl", "realm", "cdl");
         const auth = Buffer.from(`${this.username}:${this.password}`).toString("base64");
         const headers = { "Authorization": `Basic ${auth}` };
@@ -35,10 +35,10 @@ export class Ap3Client {
             throw new Error("missing id property");
         }
         if (!this.token) {
-            await this.login();
+            throw new Error("not logged in");
         }
-        const headers = { "Authorization": `Bearer ${this.token}` };
-        let url = `https://api.compassdigital.org/${this.env}/${id.service}/${id.type}/${id.id}`;
+        const headers = { "Authorization": `Bearer ${this.token?.token}` };
+        let url = `https://api.compassdigital.org/${this.env}/${id.service}/${id.type}/${ID(id)}`;
         if (query) {
             url += `?_query=${encodeURIComponent(query)}`;
         }
