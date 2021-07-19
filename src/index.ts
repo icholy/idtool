@@ -49,7 +49,7 @@ async function main(): Promise<void> {
         .argv;
     // don't bother doing anything if there are no ids to process
     if (argv._.length === 0) {
-        console.log("no ids provided");
+        console.error("no ids provided");
         return;
     }
     // create a client and use it to fetch the id's json
@@ -59,7 +59,7 @@ async function main(): Promise<void> {
         try {
             await client.login();
         } catch (err) {
-            console.log("login failed", err.message);
+            console.error("login failed", err.message);
             return;
         }
     }
