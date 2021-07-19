@@ -35,7 +35,7 @@ export class Ap3Client {
             throw new Error("missing id property");
         }
         if (!this.token) {
-            throw new Error("not logged in");
+            await this.login();
         }
         const headers = { "Authorization": `Bearer ${this.token?.token}` };
         let url = `https://api.compassdigital.org/${this.env}/${id.service}/${id.type}/${ID(id)}`;
