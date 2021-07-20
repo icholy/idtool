@@ -15,7 +15,6 @@ Options:
   -i, --info      Output id properties                [boolean] [default: false]
 ```
 
-
 ## Config
 
 Setting the `--username` and `--password` flags every time can be avoided by setting environment variables.
@@ -31,4 +30,3 @@ export IDTOOL_ENV=v1
 ```
 idtool eW0gy25y3BFaYvgPlYgmfPmZloM3d2fE032BvlZDH2g5r6qkYau18BQgWGOGFAQMvl03NkHX80
 ```
-

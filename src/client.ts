@@ -9,19 +9,13 @@ interface LoginResponse {
 export class Ap3Client {
     private token?: LoginResponse;
 
-    constructor(
-        private username: string,
-        private password: string,
-        private env = "dev"
-    ) {}
+    constructor(private username: string, private password: string, private env = "dev") {}
 
     // login authenticates using the username/password provided to the constructor and saves
     // the token to a property.
     async login(): Promise<void> {
         const realm = ID("user", "cdl", "realm", "cdl");
-        const auth = Buffer.from(`${this.username}:${this.password}`).toString(
-            "base64"
-        );
+        const auth = Buffer.from(`${this.username}:${this.password}`).toString("base64");
         const headers = { Authorization: `Basic ${auth}` };
         const response = await fetch(
             `https://api.compassdigital.org/${this.env}/user/auth?realm=${realm}`,
@@ -34,10 +28,7 @@ export class Ap3Client {
     }
 
     // fetch the resource pointed to by the provided id. The decoded id must have the id property set.
-    async fetch<ResponseData = any>(
-        id: cdl.DecodedID,
-        query?: string
-    ): Promise<ResponseData> {
+    async fetch<ResponseData = any>(id: cdl.DecodedID, query?: string): Promise<ResponseData> {
         if (!id.id) {
             throw new Error("missing id property");
         }
@@ -45,9 +36,7 @@ export class Ap3Client {
             await this.login();
         }
         const headers = { Authorization: `Bearer ${this.token?.token}` };
-        let url = `https://api.compassdigital.org/${this.env}/${id.service}/${
-            id.type
-        }/${ID(id)}`;
+        let url = `https://api.compassdigital.org/${this.env}/${id.service}/${id.type}/${ID(id)}`;
         if (query) {
             url += `?_query=${encodeURIComponent(query)}`;
         }
