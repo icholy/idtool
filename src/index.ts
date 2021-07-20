@@ -87,4 +87,4 @@ async function main(): Promise<void> {
 }
 
 // kick off main
-(async () => await main())();
+main();
