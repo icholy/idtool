@@ -18,7 +18,7 @@ Options:
 ## Example
 
 ```
-idtool -u your.name@compassdigital.io -p=secret eW0gy25y3BFaYvgPlYgmfPmZloM3d2fE032BvlZDH2g5r6qkYau18BQgWGOGFAQMvl03NkHX80
+idtool -u=your.name@compassdigital.io -p=secret eW0gy25y3BFaYvgPlYgmfPmZloM3d2fE032BvlZDH2g5r6qkYau18BQgWGOGFAQMvl03NkHX80
 ```
 
 ## Config
