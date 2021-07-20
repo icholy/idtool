@@ -23,7 +23,6 @@ This package is not published on npm, so you'll need to clone and build locally.
 git clone https://github.com/icholy/idtool.git
 cd idtool
 npm install
-npx tsc
 npm install -g .
 ```
 
