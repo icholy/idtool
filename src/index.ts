@@ -69,9 +69,12 @@ async function main(): Promise<void> {
                 throw new Error("invalid id");
             }
             if (argv.info) {
-                console.log(
-                    `service=${id.service}, provider=${id.provider}, type=${id.type}, id=${id.id}, raw=${encoded}`
-                );
+                console.log(encoded);
+                console.log(`service  = ${id.service}`);
+                console.log(`provider = ${id.provider}`);
+                console.log(`type     = ${id.type}`);
+                console.log(`id       = ${id.id}`);
+                console.log(`url      = ${client.url(id, argv.query)}`);
                 continue;
             }
             const data = await client.fetch(id, argv.query);
