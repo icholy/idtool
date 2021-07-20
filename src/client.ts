@@ -1,5 +1,5 @@
-import ID from '@compassdigital/id';
-import fetch from 'node-fetch';
+import ID from "@compassdigital/id";
+import fetch from "node-fetch";
 
 interface LoginResponse {
     user: string;
@@ -7,7 +7,6 @@ interface LoginResponse {
 }
 
 export class Ap3Client {
-
     private token?: LoginResponse;
 
     constructor(
@@ -20,9 +19,14 @@ export class Ap3Client {
     // the token to a property.
     async login(): Promise<void> {
         const realm = ID("user", "cdl", "realm", "cdl");
-        const auth = Buffer.from(`${this.username}:${this.password}`).toString("base64");
-        const headers = { "Authorization": `Basic ${auth}` };
-        const response = await fetch(`https://api.compassdigital.org/${this.env}/user/auth?realm=${realm}`, { headers });
+        const auth = Buffer.from(`${this.username}:${this.password}`).toString(
+            "base64"
+        );
+        const headers = { Authorization: `Basic ${auth}` };
+        const response = await fetch(
+            `https://api.compassdigital.org/${this.env}/user/auth?realm=${realm}`,
+            { headers }
+        );
         if (!response.ok) {
             throw new Error(await response.text());
         }
@@ -30,15 +34,20 @@ export class Ap3Client {
     }
 
     // fetch the resource pointed to by the provided id. The decoded id must have the id property set.
-    async fetch<ResponseData = any>(id: cdl.DecodedID, query?: string): Promise<ResponseData> {
+    async fetch<ResponseData = any>(
+        id: cdl.DecodedID,
+        query?: string
+    ): Promise<ResponseData> {
         if (!id.id) {
             throw new Error("missing id property");
         }
         if (!this.token) {
             await this.login();
         }
-        const headers = { "Authorization": `Bearer ${this.token?.token}` };
-        let url = `https://api.compassdigital.org/${this.env}/${id.service}/${id.type}/${ID(id)}`;
+        const headers = { Authorization: `Bearer ${this.token?.token}` };
+        let url = `https://api.compassdigital.org/${this.env}/${id.service}/${
+            id.type
+        }/${ID(id)}`;
         if (query) {
             url += `?_query=${encodeURIComponent(query)}`;
         }

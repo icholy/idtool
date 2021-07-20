@@ -25,7 +25,7 @@ idtool -u your.name@compassdigital.io -p=secret eW0gy25y3BFaYvgPlYgmfPmZloM3d2fE
 
 Setting the `--username` and `--password` flags every time can be avoided by setting environment variables.
 
-``` sh
+```sh
 export IDTOOL_USERNAME=your.name@compassdigital.io
 export IDTOOL_PASSWORD=secret
 export IDTOOL_ENV=v1

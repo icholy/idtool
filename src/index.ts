@@ -1,52 +1,50 @@
-
-import ID from '@compassdigital/id';
-import yargs from 'yargs/yargs';
-import { hideBin } from 'yargs/helpers';
-import { Ap3Client } from './client';
+import ID from "@compassdigital/id";
+import yargs from "yargs/yargs";
+import { hideBin } from "yargs/helpers";
+import { Ap3Client } from "./client";
 
 // main is the entry point for the program. It's responsible for parsing command
 // line flags and dispatching to the appropriate functions.
 async function main(): Promise<void> {
     // parse the command line flags
     const argv = await yargs(hideBin(process.argv))
-        .env('IDTOOL')
-        .options('env', {
-            alias: 'e',
-            type: 'string',
-            description: 'Environment to run in',
-            default: 'dev',
-            choices: ['dev', 'stage', 'v1'],
+        .env("IDTOOL")
+        .options("env", {
+            alias: "e",
+            type: "string",
+            description: "Environment to run in",
+            default: "dev",
+            choices: ["dev", "stage", "v1"],
         })
-        .options('username', {
-            alias: 'u',
-            type: 'string',
-            description: 'AP3 username',
+        .options("username", {
+            alias: "u",
+            type: "string",
+            description: "AP3 username",
             demandOption: true,
         })
-        .options('password', {
-            alias: 'p',
-            type: 'string',
+        .options("password", {
+            alias: "p",
+            type: "string",
             description: "AP3 password",
             demandOption: true,
         })
-        .options('query', {
-            alias: 'q',
-            type: 'string',
-            description: 'Graphql query to augment the response',
+        .options("query", {
+            alias: "q",
+            type: "string",
+            description: "Graphql query to augment the response",
         })
-        .options('format', {
-            alias: 'f',
-            type: 'boolean',
+        .options("format", {
+            alias: "f",
+            type: "boolean",
             description: "Format json before outputting",
             default: true,
         })
-        .options('info', {
-            alias: 'i',
-            type: 'boolean',
+        .options("info", {
+            alias: "i",
+            type: "boolean",
             description: "Output id properties",
             default: false,
-        })
-        .argv;
+        }).argv;
     // don't bother doing anything if there are no ids to process
     if (argv._.length === 0) {
         console.error("no ids provided");
@@ -71,7 +69,9 @@ async function main(): Promise<void> {
                 throw new Error("invalid id");
             }
             if (argv.info) {
-                console.log(`service=${id.service}, provider=${id.provider}, type=${id.type}, id=${id.id}, raw=${encoded}`);
+                console.log(
+                    `service=${id.service}, provider=${id.provider}, type=${id.type}, id=${id.id}, raw=${encoded}`
+                );
                 continue;
             }
             const data = await client.fetch(id, argv.query);
