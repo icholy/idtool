@@ -14,6 +14,15 @@ Options:
   -f, --format    Format json before outputting        [boolean] [default: true]
   -i, --info      Output id properties                [boolean] [default: false]
 ```
+## Install
+
+This package is not published on npm, so you'll need to clone the repo to install.
+
+```
+git clone https://github.com/icholy/idtool.git
+cd idtool
+npm install -g .
+```
 
 ## Config
 
