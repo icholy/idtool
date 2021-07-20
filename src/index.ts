@@ -69,7 +69,7 @@ async function main(): Promise<void> {
                 throw new Error("invalid id");
             }
             if (argv.info) {
-                console.log(encoded);
+                console.log(`raw      = ${encoded}`);
                 console.log(`service  = ${id.service}`);
                 console.log(`provider = ${id.provider}`);
                 console.log(`type     = ${id.type}`);
