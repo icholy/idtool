@@ -8,7 +8,7 @@ interface LoginResponse {
 
 export class Ap3Client {
 
-    private token?: LoginResponse;;
+    private token?: LoginResponse;
 
     constructor(
         private username: string,
