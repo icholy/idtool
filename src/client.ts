@@ -36,7 +36,12 @@ export class Ap3Client {
             await this.login();
         }
         const headers = { Authorization: `Bearer ${this.token?.token}` };
-        let url = `https://api.compassdigital.org/${this.env}/${id.service}/${id.type}/${ID(id)}`;
+        let url = `https://api.compassdigital.org`;
+        if (id.service === id.type) {
+            url += `/${this.env}/${id.service}/${ID(id)}`;
+        } else {
+            url += `/${this.env}/${id.service}/${id.type}/${ID(id)}`;
+        }
         if (query) {
             url += `?_query=${encodeURIComponent(query)}`;
         }
