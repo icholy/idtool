@@ -15,11 +15,6 @@ Options:
   -i, --info      Output id properties                [boolean] [default: false]
 ```
 
-## Example
-
-```
-idtool -u=your.name@compassdigital.io -p=secret eW0gy25y3BFaYvgPlYgmfPmZloM3d2fE032BvlZDH2g5r6qkYau18BQgWGOGFAQMvl03NkHX80
-```
 
 ## Config
 
@@ -30,3 +25,10 @@ export IDTOOL_USERNAME=your.name@compassdigital.io
 export IDTOOL_PASSWORD=secret
 export IDTOOL_ENV=v1
 ```
+
+## Example
+
+```
+idtool eW0gy25y3BFaYvgPlYgmfPmZloM3d2fE032BvlZDH2g5r6qkYau18BQgWGOGFAQMvl03NkHX80
+```
+
