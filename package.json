@@ -2,7 +2,10 @@
     "name": "idtool",
     "version": "1.0.0",
     "description": "Tool for dealing with CDL ids",
-    "main": "bin/index.js",
+    "main": "lib/client.js",
+    "bin": {
+        "idtool": "bin/index.js"
+    },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
