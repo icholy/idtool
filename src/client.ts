@@ -27,6 +27,20 @@ export class Ap3Client {
         this.token = await response.json();
     }
 
+    // url returns the api url for the resource pointed to by the id.
+    url(id: cdl.DecodedID, query?: string): string {
+        let url = `https://api.compassdigital.org/${this.env}`;
+        if (id.service === id.type) {
+            url += `/${id.service}/${ID(id)}`;
+        } else {
+            url += `/${id.service}/${id.type}/${ID(id)}`;
+        }
+        if (query) {
+            url += `?_query=${encodeURIComponent(query)}`;
+        }
+        return url;
+    }
+
     // fetch the resource pointed to by the provided id. The decoded id must have the id property set.
     async fetch<ResponseData = any>(id: cdl.DecodedID, query?: string): Promise<ResponseData> {
         if (!id.id) {
@@ -36,16 +50,7 @@ export class Ap3Client {
             await this.login();
         }
         const headers = { Authorization: `Bearer ${this.token?.token}` };
-        let url = `https://api.compassdigital.org`;
-        if (id.service === id.type) {
-            url += `/${this.env}/${id.service}/${ID(id)}`;
-        } else {
-            url += `/${this.env}/${id.service}/${id.type}/${ID(id)}`;
-        }
-        if (query) {
-            url += `?_query=${encodeURIComponent(query)}`;
-        }
-        const response = await fetch(url, { headers });
+        const response = await fetch(this.url(id, query), { headers });
         if (!response.ok) {
             throw new Error(await response.text());
         }
