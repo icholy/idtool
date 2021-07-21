@@ -1,7 +1,8 @@
 import ID from "@compassdigital/id";
 import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
-import { Ap3Client } from "./client";
+import { Ap3Client, FetchOptions } from "./client";
+import { boolean } from "yargs";
 
 // main is the entry point for the program. It's responsible for parsing command
 // line flags and dispatching to the appropriate functions.
@@ -44,7 +45,17 @@ async function main(): Promise<void> {
             type: "boolean",
             description: "Output id properties",
             default: false,
-        }).argv;
+        })
+        .options("extended", {
+            alias: "x",
+            type: "boolean",
+            description: "Request extended output",
+        })
+        .options("nocache", {
+            type: "boolean",
+            description: "Don't return cached info"
+        })
+        .argv;
     // don't bother doing anything if there are no ids to process
     if (argv._.length === 0) {
         console.error("no ids provided");
@@ -68,16 +79,21 @@ async function main(): Promise<void> {
             if (!id) {
                 throw new Error("invalid id");
             }
+            const options: FetchOptions = {
+                query: argv.query,
+                extended: argv.extended,
+                nocache: argv.nocache,
+            }
             if (argv.info) {
                 console.log(`raw      = ${encoded}`);
                 console.log(`service  = ${id.service}`);
                 console.log(`provider = ${id.provider}`);
                 console.log(`type     = ${id.type}`);
                 console.log(`id       = ${id.id}`);
-                console.log(`url      = ${client.url(id, argv.query)}`);
+                console.log(`url      = ${client.url(id, options)}`);
                 continue;
             }
-            const data = await client.fetch(id, argv.query);
+            const data = await client.fetch(id, options);
             if (argv.format) {
                 console.log(JSON.stringify(data, null, 2));
             } else {

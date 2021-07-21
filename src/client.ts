@@ -6,6 +6,12 @@ interface LoginResponse {
     token: string;
 }
 
+export interface FetchOptions {
+    query?: string;
+    nocache?: boolean;
+    extended?: boolean;
+}
+
 export class Ap3Client {
     private token?: LoginResponse;
 
@@ -28,21 +34,31 @@ export class Ap3Client {
     }
 
     // url returns the api url for the resource pointed to by the id.
-    url(id: cdl.DecodedID, query?: string): string {
+    url(id: cdl.DecodedID, options?: FetchOptions): string {
         let url = `https://api.compassdigital.org/${this.env}`;
         if (id.service === id.type) {
             url += `/${id.service}/${ID(id)}`;
         } else {
             url += `/${id.service}/${id.type}/${ID(id)}`;
         }
-        if (query) {
-            url += `?_query=${encodeURIComponent(query)}`;
+        let query = [];
+        if (options?.query) {
+            query.push(`_query=${encodeURIComponent(options?.query)}`);
+        }
+        if (options?.nocache) {
+            query.push(`nocache=true`);
+        }
+        if (options?.extended) {
+            query.push(`extended=true`);
+        }
+        if (query.length > 0) {
+            url += `?${query.join("&")}`;
         }
         return url;
     }
 
     // fetch the resource pointed to by the provided id. The decoded id must have the id property set.
-    async fetch<ResponseData = any>(id: cdl.DecodedID, query?: string): Promise<ResponseData> {
+    async fetch<ResponseData = any>(id: cdl.DecodedID, option?: FetchOptions): Promise<ResponseData> {
         if (!id.id) {
             throw new Error("missing id property");
         }
@@ -50,7 +66,7 @@ export class Ap3Client {
             await this.login();
         }
         const headers = { Authorization: `Bearer ${this.token?.token}` };
-        const response = await fetch(this.url(id, query), { headers });
+        const response = await fetch(this.url(id, option), { headers });
         if (!response.ok) {
             throw new Error(await response.text());
         }
