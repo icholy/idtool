@@ -57,19 +57,24 @@ export class Ap3Client {
         return url;
     }
 
-    // fetch the resource pointed to by the provided id. The decoded id must have the id property set.
-    async fetch<ResponseData = any>(id: cdl.DecodedID, option?: FetchOptions): Promise<ResponseData> {
-        if (!id.id) {
-            throw new Error("missing id property");
-        }
+    // fetch the provided url.
+    async fetch<ResponseData = any>(url: string): Promise<ResponseData> {
         if (!this.token) {
             await this.login();
         }
         const headers = { Authorization: `Bearer ${this.token?.token}` };
-        const response = await fetch(this.url(id, option), { headers });
+        const response = await fetch(url, { headers });
         if (!response.ok) {
             throw new Error(await response.text());
         }
         return response.json();
+    }
+
+    // fetch the resource pointed to by the provided id. The decoded id must have the id property set.
+    async fetchID<ResponseData = any>(id: cdl.DecodedID, options?: FetchOptions): Promise<ResponseData> {
+        if (!id.id) {
+            throw new Error("missing id property");
+        }
+        return this.fetch<ResponseData>(this.url(id, options))
     }
 }

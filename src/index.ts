@@ -84,7 +84,7 @@ async function main(): Promise<void> {
                 console.log(`url      = ${client.url(id, options)}`);
                 continue;
             }
-            const data = await client.fetch(id, options);
+            const data = await client.fetchID(id, options);
             if (argv.format) {
                 console.log(JSON.stringify(data, null, 2));
             } else {
