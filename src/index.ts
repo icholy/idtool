@@ -63,15 +63,6 @@ async function main(): Promise<void> {
     }
     // create a client and use it to fetch the id's json
     const client = new Ap3Client(argv.username, argv.password, argv.env);
-    // authenticate
-    if (!argv.info) {
-        try {
-            await client.login();
-        } catch (err) {
-            console.error("login failed", err.message);
-            return;
-        }
-    }
     // treat each positional argument as an id
     for (const encoded of argv._) {
         try {
@@ -100,7 +91,7 @@ async function main(): Promise<void> {
                 console.log(JSON.stringify(data));
             }
         } catch (err) {
-            console.error("fetch", err.message, `raw=${encoded}`);
+            console.error("error:", err.message, `raw=${encoded}`);
         }
     }
 }
