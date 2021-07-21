@@ -71,10 +71,13 @@ export class Ap3Client {
     }
 
     // fetch the resource pointed to by the provided id. The decoded id must have the id property set.
-    async fetchID<ResponseData = any>(id: cdl.DecodedID, options?: FetchOptions): Promise<ResponseData> {
+    async fetchID<ResponseData = any>(
+        id: cdl.DecodedID,
+        options?: FetchOptions
+    ): Promise<ResponseData> {
         if (!id.id) {
             throw new Error("missing id property");
         }
-        return this.fetch<ResponseData>(this.url(id, options))
+        return this.fetch<ResponseData>(this.url(id, options));
     }
 }

@@ -53,9 +53,8 @@ async function main(): Promise<void> {
         })
         .options("nocache", {
             type: "boolean",
-            description: "Don't return cached info"
-        })
-        .argv;
+            description: "Don't return cached info",
+        }).argv;
     // don't bother doing anything if there are no ids to process
     if (argv._.length === 0) {
         console.error("no ids provided");
@@ -74,7 +73,7 @@ async function main(): Promise<void> {
                 query: argv.query,
                 extended: argv.extended,
                 nocache: argv.nocache,
-            }
+            };
             if (argv.info) {
                 console.log(`raw      = ${encoded}`);
                 console.log(`service  = ${id.service}`);
