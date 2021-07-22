@@ -46,6 +46,12 @@ async function main(): Promise<void> {
             description: "Output id properties",
             default: false,
         })
+        .options("token", {
+            alias: "t",
+            type: "boolean",
+            description: "Output session token",
+            default: false,
+        })
         .options("extended", {
             alias: "x",
             type: "boolean",
@@ -62,6 +68,16 @@ async function main(): Promise<void> {
     }
     // create a client and use it to fetch the id's json
     const client = new Ap3Client(argv.username, argv.password, argv.env);
+    // login and output the token if that's what was requested.
+    if (argv.token) {
+        try {
+            await client.login();
+            console.log(`Bearer ${client.token()}`);
+        } catch (err) {
+            console.error("error", err.message)
+        }
+        return;
+    }
     // treat each positional argument as an id
     for (const encoded of argv._) {
         try {

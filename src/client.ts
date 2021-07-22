@@ -1,7 +1,7 @@
 import ID from "@compassdigital/id";
 import fetch from "node-fetch";
 
-interface LoginResponse {
+interface Session {
     user: string;
     token: string;
 }
@@ -13,9 +13,14 @@ export interface FetchOptions {
 }
 
 export class Ap3Client {
-    private token?: LoginResponse;
+    private session?: Session;
 
     constructor(private username: string, private password: string, private env = "dev") {}
+
+    // token returns the session token for external use.
+    token(): string|undefined {
+        return this.session?.token;
+    }
 
     // login authenticates using the username/password provided to the constructor and saves
     // the token to a property.
@@ -30,7 +35,7 @@ export class Ap3Client {
         if (!response.ok) {
             throw new Error(await response.text());
         }
-        this.token = await response.json();
+        this.session = await response.json();
     }
 
     // url returns the api url for the resource pointed to by the id.
@@ -62,7 +67,7 @@ export class Ap3Client {
         if (!this.token) {
             await this.login();
         }
-        const headers = { Authorization: `Bearer ${this.token?.token}` };
+        const headers = { Authorization: `Bearer ${this.token()}` };
         const response = await fetch(url, { headers });
         if (!response.ok) {
             throw new Error(await response.text());
