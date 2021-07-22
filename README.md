@@ -13,6 +13,9 @@ Options:
   -q, --query     Graphql query to augment the response                 [string]
   -f, --format    Format json before outputting        [boolean] [default: true]
   -i, --info      Output id properties                [boolean] [default: false]
+  -t, --token     Output session token                [boolean] [default: false]
+  -x, --extended  Request extended output                              [boolean]
+      --nocache   Don't return cached info                             [boolean]
 ```
 
 ## Install
