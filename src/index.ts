@@ -61,11 +61,6 @@ async function main(): Promise<void> {
             type: "boolean",
             description: "Don't return cached info",
         }).argv;
-    // don't bother doing anything if there are no ids to process
-    if (argv._.length === 0) {
-        console.error("no ids provided");
-        return;
-    }
     // create a client and use it to fetch the id's json
     const client = new Ap3Client(argv.username, argv.password, argv.env);
     // login and output the token if that's what was requested.
@@ -76,6 +71,11 @@ async function main(): Promise<void> {
         } catch (err) {
             console.error("error", err.message)
         }
+        return;
+    }
+    // don't bother doing anything if there are no ids to process
+    if (argv._.length === 0) {
+        console.error("no ids provided");
         return;
     }
     // treat each positional argument as an id
