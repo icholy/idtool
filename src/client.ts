@@ -1,4 +1,5 @@
 import ID from "@compassdigital/id";
+import { DecodedID } from "@compassdigital/id/interface";
 import fetch from "node-fetch";
 
 interface Session {
@@ -39,7 +40,7 @@ export class Ap3Client {
     }
 
     // url returns the api url for the resource pointed to by the id.
-    url(id: cdl.DecodedID, options?: FetchOptions): string {
+    url(id: DecodedID, options?: FetchOptions): string {
         let url = `https://api.compassdigital.org/${this.env}`;
         if (id.service === id.type) {
             url += `/${id.service}/${ID(id)}`;
@@ -77,7 +78,7 @@ export class Ap3Client {
 
     // fetch the resource pointed to by the provided id. The decoded id must have the id property set.
     async fetchID<ResponseData = any>(
-        id: cdl.DecodedID,
+        id: DecodedID,
         options?: FetchOptions
     ): Promise<ResponseData> {
         if (!id.id) {

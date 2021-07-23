@@ -2,7 +2,6 @@ import ID from "@compassdigital/id";
 import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
 import { Ap3Client, FetchOptions } from "./client";
-import { boolean } from "yargs";
 
 // main is the entry point for the program. It's responsible for parsing command
 // line flags and dispatching to the appropriate functions.
