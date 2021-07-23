@@ -41,6 +41,30 @@ export IDTOOL_ENV=v1
 
 ## Example
 
+### Get Info
+
 ```
-idtool eW0gy25y3BFaYvgPlYgmfPmZloM3d2fE032BvlZDH2g5r6qkYau18BQgWGOGFAQMvl03NkHX80
+$ idtool -i eW0gy25y3BFaYvgPlYgmfPmZloM3d2fE032BvlZDH2g5r6qkYau18BQgWGOGFAQMvl03NkHX80
+raw      = eW0gy25y3BFaYvgPlYgmfPmZloM3d2fE032BvlZDH2g5r6qkYau18BQgWGOGFAQMvl03NkHX80
+service  = location
+provider = cdl
+type     = group
+id       = 7c732f634cbf443092ae6f289d80121f
+url      = https://api.compassdigital.org/dev/location/group/eW0gy25y3BFaYvgPlYgmfPmZloM3d2fE032BvlZDH2g5r6qkYau18BQgWGOGFAQMvl03NkHX80
+```
+
+### Get Content
+
+```
+$ idtool eW0gy25y3BFaYvgPlYgmfPmZloM3d2fE032BvlZDH2g5r6qkYau18BQgWGOGFAQMvl03NkHX80 | head 
+{
+  "label": {
+    "en": "2mato site - used in tests - DO NOT DELETE1"
+  },
+  "meta": {
+    "sector_name": "CulinArt"
+  },
+  "address": {
+    "state": "VA",
+    "zip": "20190",
 ```
