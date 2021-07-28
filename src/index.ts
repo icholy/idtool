@@ -20,13 +20,11 @@ async function main(): Promise<void> {
             alias: "u",
             type: "string",
             description: "AP3 username",
-            demandOption: true,
         })
         .options("password", {
             alias: "p",
             type: "string",
             description: "AP3 password",
-            demandOption: true,
         })
         .options("query", {
             alias: "q",
@@ -59,9 +57,19 @@ async function main(): Promise<void> {
         .options("nocache", {
             type: "boolean",
             description: "Don't return cached info",
-        }).argv;
+        })
+        .options("bearer", {
+            alias: "b",
+            type: "string",
+            description: "Bearer token to use"
+        })
+        .argv;
+    // make sure we have a username & password
+    if (!argv.token && (!argv.username || !argv.password)) {
+        console.error(`--username and --password must be set`);
+    }
     // create a client and use it to fetch the id's json
-    const client = new Ap3Client(argv.username, argv.password, argv.env);
+    const client = new Ap3Client(argv.username ?? "", argv.password ?? "", argv.env);
     // login and output the token if that's what was requested.
     if (argv.token) {
         try {
@@ -71,6 +79,10 @@ async function main(): Promise<void> {
             console.error("error", err.message)
         }
         return;
+    }
+    // set the token if one was provided
+    if (argv.bearer) {
+        client.setToken(argv.bearer);
     }
     // don't bother doing anything if there are no ids to process
     if (argv._.length === 0) {

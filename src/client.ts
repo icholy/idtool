@@ -23,6 +23,11 @@ export class Ap3Client {
         return this.session?.token;
     }
 
+    // set the user token
+    setToken(token: string): void {
+        this.session = { user: "", token };
+    }
+
     // login authenticates using the username/password provided to the constructor and saves
     // the token to a property.
     async login(): Promise<void> {
