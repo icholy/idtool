@@ -14,7 +14,7 @@ async function main(): Promise<void> {
             type: "string",
             description: "Environment to run in",
             default: "dev",
-            choices: ["dev", "stage", "v1"],
+            choices: ["dev", "staging", "v1"],
         })
         .options("username", {
             alias: "u",
