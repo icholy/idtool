@@ -7,15 +7,18 @@ Options:
       --help      Show help                                            [boolean]
       --version   Show version number                                  [boolean]
   -e, --env       Environment to run in
-                       [string] [choices: "dev", "stage", "v1"] [default: "dev"]
-  -u, --username  AP3 username                               [string] [required]
-  -p, --password  AP3 password                               [string] [required]
+                     [string] [choices: "dev", "staging", "v1"] [default: "dev"]
+  -u, --username  AP3 username                                          [string]
+  -p, --password  AP3 password                                          [string]
   -q, --query     Graphql query to augment the response                 [string]
   -f, --format    Format json before outputting        [boolean] [default: true]
   -i, --info      Output id properties                [boolean] [default: false]
   -t, --token     Output session token                [boolean] [default: false]
   -x, --extended  Request extended output                              [boolean]
       --nocache   Don't return cached info                             [boolean]
+  -b, --bearer    Bearer token to use                                   [string]
+  -c, --config    Fetch config for id                                  [boolean]
+  -P, --public    Fetch public config                                  [boolean]
 ```
 
 ## Install
@@ -67,6 +70,28 @@ $ idtool eW0gy25y3BFaYvgPlYgmfPmZloM3d2fE032BvlZDH2g5r6qkYau18BQgWGOGFAQMvl03NkH
   "address": {
     "state": "VA",
     "zip": "20190",
+```
+
+### Get Config
+
+```
+$ idtool -c 31eWdBPdlECeOeGQAX6auq433AAmOZCGqR16JG2zSyjK82X24qUREZAEodzgiRJ9l2qAN9Cmzp
+{
+  "payment": {
+    "freedompay": {
+      "id": "12312312312312312323",
+      "freedompay_store_id": "123",
+      "freedompay_terminal_id": "123"
+    },
+    "refund": false
+  },
+  "email": "bob.dylan@gmail.com",
+  "kds": {
+    "admin_passcode": "1234"
+  },
+  "loyalty": {
+    "enabled": false
+  },
 ```
 
 ### Get Auth Token
