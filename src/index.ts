@@ -1,4 +1,5 @@
 import ID from "@compassdigital/id";
+import { DecodedID } from "@compassdigital/id/interface";
 import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
 import { Ap3Client, FetchOptions } from "./client";
@@ -61,7 +62,17 @@ async function main(): Promise<void> {
         .options("bearer", {
             alias: "b",
             type: "string",
-            description: "Bearer token to use"
+            description: "Bearer token to use",
+        })
+        .options("config", {
+            alias: "c",
+            type: "boolean",
+            description: "Fetch config for id",
+        })
+        .options("public", {
+            alias: "P",
+            type: "boolean",
+            description: "Fetch public config",
         })
         .argv;
     // make sure we have a username & password
@@ -90,9 +101,27 @@ async function main(): Promise<void> {
         return;
     }
     // treat each positional argument as an id
-    for (const encoded of argv._) {
+    for (let arg of argv._) {
         try {
-            const id = ID(encoded.toString());
+            // fetch the config if it was requested.
+            if (argv.config) {
+                const key = arg.toString();
+                const url = client.configURL(key, argv.public);
+                if (argv.info) {
+                    console.log(`url = ${url}`);
+                    continue;
+                }
+                const data = await client.fetch(url);
+                if (argv.format) {
+                    console.log(JSON.stringify(data, null, 2));
+                } else {
+                    console.log(JSON.stringify(data));
+                }
+                continue;
+            }
+            // otherwise fetch the content referenced by the id.
+            const encoded = arg.toString();
+            const id = ID(encoded);
             if (!id) {
                 throw new Error("invalid id");
             }
@@ -117,7 +146,7 @@ async function main(): Promise<void> {
                 console.log(JSON.stringify(data));
             }
         } catch (err) {
-            console.error("error:", err.message, `raw=${encoded}`);
+            console.error("error:", err.message, `raw=${arg}`);
         }
     }
 }

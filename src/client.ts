@@ -28,25 +28,37 @@ export class Ap3Client {
         this.session = { user: "", token };
     }
 
+    // baseURL returns the base url for the configured stage.
+    baseURL(): string {
+        return `https://api.compassdigital.org/${this.env}`;
+    }
+
     // login authenticates using the username/password provided to the constructor and saves
     // the token to a property.
     async login(): Promise<void> {
         const realm = ID("user", "cdl", "realm", "cdl");
         const auth = Buffer.from(`${this.username}:${this.password}`).toString("base64");
         const headers = { Authorization: `Basic ${auth}` };
-        const response = await fetch(
-            `https://api.compassdigital.org/${this.env}/user/auth?realm=${realm}`,
-            { headers }
-        );
+        const url = `${this.baseURL()}/user/auth?realm=${realm}`
+        const response = await fetch(url, { headers });
         if (!response.ok) {
             throw new Error(await response.text());
         }
         this.session = await response.json();
     }
 
+    // configURL returns the url for the provided config key.
+    configURL(key: string, _public = false): string {
+        let url = this.baseURL();
+        if (_public) {
+            return `${url}/config/public/${key}`;
+        }
+        return `${url}/config/${key}`;
+    }
+
     // url returns the api url for the resource pointed to by the id.
     url(id: DecodedID, options?: FetchOptions): string {
-        let url = `https://api.compassdigital.org/${this.env}`;
+        let url = this.baseURL();
         if (id.service === id.type) {
             url += `/${id.service}/${ID(id)}`;
         } else {
