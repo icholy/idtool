@@ -70,7 +70,7 @@ export class Ap3Client {
 
     // fetch the provided url.
     async fetch<ResponseData = any>(url: string): Promise<ResponseData> {
-        if (!this.token) {
+        if (!this.session) {
             await this.login();
         }
         const headers = { Authorization: `Bearer ${this.token()}` };
