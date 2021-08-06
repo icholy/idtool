@@ -75,17 +75,17 @@ $ idtool eW0gy25y3BFaYvgPlYgmfPmZloM3d2fE032BvlZDH2g5r6qkYau18BQgWGOGFAQMvl03NkH
 ### Get Config
 
 ```
-$ idtool -c 31eWdBPdlECeOeGQAX6auq433AAmOZCGqR16JG2zSyjK82X24qUREZAEodzgiRJ9l2qAN9Cmzp
+$ idtool -c eW0gy25y3BFaYvgPlYgmfPmZloM3d2fE032BvlZDH2g5r6qkYau18BQgWGOGFAQMvl03NkHX80 | head
 {
   "payment": {
-    "freedompay": {
-      "id": "12312312312312312323",
-      "freedompay_store_id": "123",
-      "freedompay_terminal_id": "123"
+    "braintree": {
+      "id": "a2FSU3dlvUTBvM2lqOEJlaFE1WGVaOThrY",
+      "merchant_account_id": "234"
     },
     "refund": false
   },
-  "email": "bob.dylan@gmail.com",
+  "loyalty": {
+    "enabled": false
 ```
 
 ### Get Auth Token
