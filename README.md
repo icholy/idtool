@@ -86,12 +86,6 @@ $ idtool -c 31eWdBPdlECeOeGQAX6auq433AAmOZCGqR16JG2zSyjK82X24qUREZAEodzgiRJ9l2qA
     "refund": false
   },
   "email": "bob.dylan@gmail.com",
-  "kds": {
-    "admin_passcode": "1234"
-  },
-  "loyalty": {
-    "enabled": false
-  },
 ```
 
 ### Get Auth Token
