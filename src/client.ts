@@ -110,7 +110,7 @@ export class Ap3Client {
             }
             methods.push({
                 name: name,
-                args: funcArgs(api[name]),
+                args: funcArgs(api[name]).slice(0, -1),
             });
         }
         return methods;
