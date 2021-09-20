@@ -103,8 +103,9 @@ export class Ap3Client {
     methods(): Method[] {
         const methods: Method[] = [];
         const api: any = this.api;
-        for (const name of api) {
-            if (typeof api[name] !== "function" && name !== "request" && name !== "_request") {
+        const ignore = new Set(["request", "_request", "is_4xx", "build_url", "fetch", "get_options", "constructor"]);
+        for (const name in api) {
+            if (typeof api[name] !== "function" || ignore.has(name)) {
                 continue;
             }
             methods.push({
