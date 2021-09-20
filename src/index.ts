@@ -92,7 +92,7 @@ async function main(): Promise<void> {
             await client.login();
             console.log(`Bearer ${client.token()}`);
         } catch (err: any) {
-            console.error("error", err.message)
+            console.error("error:", err.message)
         }
         return;
     }
@@ -114,7 +114,7 @@ async function main(): Promise<void> {
                 console.log(JSON.stringify(data));
             }
         } catch (err: any) {
-            console.error("error", err.message);
+            console.error("error:", err.message);
         }
         return;
     }
