@@ -100,11 +100,7 @@ async function main(): Promise<void> {
     if (argv.bearer) {
         client.setToken(argv.bearer);
     }
-    // don't bother doing anything if there are no ids to process
-    if (argv._.length === 0) {
-        console.error("no ids provided");
-        return;
-    }
+    // check if we're calling a service client method
     if (argv.method) {
         try {
             const data = await client.method(argv.method, ...argv._);
@@ -116,6 +112,11 @@ async function main(): Promise<void> {
         } catch (err: any) {
             console.error("error:", err.message);
         }
+        return;
+    }
+    // don't bother doing anything if there are no ids to process
+    if (argv._.length === 0) {
+        console.error("no ids provided");
         return;
     }
     // treat each positional argument as an id
