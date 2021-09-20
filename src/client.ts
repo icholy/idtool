@@ -90,7 +90,7 @@ export class Ap3Client {
         }
         const methodArgs = funcArgs(method).slice(0, -1);
         if (methodArgs.length !== args.length) {
-            throw new Error(`expected ${methodArgs.length} args: (${methodArgs.join(",")}), recieved ${args.length}`);
+            throw new Error(`expected ${methodArgs.length} args: (${methodArgs.join(", ")}), recieved ${args.length}`);
         }
         return method.call(api, args.map((arg, i) => {
             if (methodArgs[i] === "body" && typeof arg === "string") {
