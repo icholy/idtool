@@ -90,7 +90,9 @@ async function main(): Promise<void> {
     // list methods if requested
     if (argv.list) {
         for (const method of client.methods()) {
-            console.log(`${method.name}(${method.args.join(", ")})`);
+            if (method.name.startsWith("get_")) {
+                console.log(`${method.name}(${method.args.join(", ")})`);
+            }
         }
         return;
     }
