@@ -82,7 +82,7 @@ export class Ap3Client {
         return url;
     }
 
-    async method(name: string, ...args: (string|number)[]): Promise<any> {
+    async method(name: string, args: (string|number)[], options: RequestOptions): Promise<any> {
         if (!this.auth) {
             await this.login();
         }
@@ -102,10 +102,7 @@ export class Ap3Client {
             }
             return arg;
         });
-        return method.call(api, ...args_, {
-            token: this.token(),
-            debug: true,
-        } as RequestOptions);
+        return method.call(api, ...args_, { token: this.token(), ...options });
     }
 
     methods(): Method[] {

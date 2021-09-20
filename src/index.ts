@@ -117,7 +117,7 @@ async function main(): Promise<void> {
     // check if we're calling a service client method
     if (argv.method) {
         try {
-            const data = await client.method(argv.method, ...argv._);
+            const data = await client.method(argv.method, argv._, {});
             console.log(JSON.stringify(data, null, argv.format ? 2 : 0));
         } catch (err: any) {
             console.error("error:", err.message);
