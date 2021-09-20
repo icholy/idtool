@@ -104,11 +104,7 @@ async function main(): Promise<void> {
     if (argv.method) {
         try {
             const data = await client.method(argv.method, ...argv._);
-            if (argv.format) {
-                console.log(JSON.stringify(data, null, 2));
-            } else {
-                console.log(JSON.stringify(data));
-            }
+            console.log(JSON.stringify(data, null, argv.format ? 2 : 0));
         } catch (err: any) {
             console.error("error:", err.message);
         }
@@ -131,11 +127,7 @@ async function main(): Promise<void> {
                     continue;
                 }
                 const data = await client.fetch(url);
-                if (argv.format) {
-                    console.log(JSON.stringify(data, null, 2));
-                } else {
-                    console.log(JSON.stringify(data));
-                }
+                console.log(JSON.stringify(data, null, argv.format ? 2 : 0));
                 continue;
             }
             // otherwise fetch the content referenced by the id.
