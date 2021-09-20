@@ -82,7 +82,7 @@ export class Ap3Client {
         return url;
     }
 
-    async method(name: string, args: (string|number)[], options: RequestOptions): Promise<any> {
+    async method(name: string, args: (string|number)[], options: RequestOptions & { query: object }): Promise<any> {
         if (!this.auth) {
             await this.login();
         }
