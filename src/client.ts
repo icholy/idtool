@@ -1,11 +1,9 @@
 import ID from "@compassdigital/id";
 import { DecodedID } from "@compassdigital/id/interface";
 import fetch from "node-fetch";
-
-interface Session {
-    user: string;
-    token: string;
-}
+import { ServiceClient } from "@compassdigital/sdk.typescript";
+import { GetUserAuthResponse } from "@compassdigital/sdk.typescript/interface/user";
+import { funcArgs } from "./funcargs";
 
 export interface FetchOptions {
     query?: string;
@@ -14,18 +12,21 @@ export interface FetchOptions {
 }
 
 export class Ap3Client {
-    private session?: Session;
+    private auth?: GetUserAuthResponse;
+    private api: ServiceClient;
 
-    constructor(private username: string, private password: string, private env = "dev") {}
+    constructor(private username: string, private password: string, private env = "dev") {
+        this.api = new ServiceClient({ stage: env });
+    }
 
     // token returns the session token for external use.
     token(): string|undefined {
-        return this.session?.token;
+        return this.auth?.token;
     }
 
     // set the user token
     setToken(token: string): void {
-        this.session = { user: "", token };
+        this.auth = { user: "", token };
     }
 
     // baseURL returns the base url for the configured stage.
@@ -36,15 +37,11 @@ export class Ap3Client {
     // login authenticates using the username/password provided to the constructor and saves
     // the token to a property.
     async login(): Promise<void> {
-        const realm = ID("user", "cdl", "realm", "cdl");
         const auth = Buffer.from(`${this.username}:${this.password}`).toString("base64");
-        const headers = { Authorization: `Basic ${auth}` };
-        const url = `${this.baseURL()}/user/auth?realm=${realm}`
-        const response = await fetch(url, { headers });
-        if (!response.ok) {
-            throw new Error(await response.text());
-        }
-        this.session = await response.json();
+        this.auth = await this.api.get_user_auth({
+            headers: { Authorization: `Basic ${auth}` },
+            query: { realm: ID("user", "cdl", "realm", "cdl") },
+        });
     }
 
     // configURL returns the url for the provided config key.
@@ -80,9 +77,27 @@ export class Ap3Client {
         return url;
     }
 
+    async method(name: string, ...args: (string|number)[]): Promise<any> {
+        const api: any = this.api;
+        const method: Function = api[name];
+        if (typeof method !== "function") {
+            throw new Error(`Invalid method name: ${name}`);
+        }
+        const methodArgs = funcArgs(method).slice(0, -1);
+        if (methodArgs.length !== args.length) {
+            throw new Error(`expected ${methodArgs.length} args: (${methodArgs.join(",")}), recieved ${args.length}`);
+        }
+        return method.call(api, args.map((arg, i) => {
+            if (methodArgs[i] === "body" && typeof arg === "string") {
+                return JSON.parse(arg);
+            }
+            return arg;
+        }));
+    }
+
     // fetch the provided url.
     async fetch<ResponseData = any>(url: string): Promise<ResponseData> {
-        if (!this.session) {
+        if (!this.auth) {
             await this.login();
         }
         const headers = { Authorization: `Bearer ${this.token()}` };

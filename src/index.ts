@@ -74,6 +74,11 @@ async function main(): Promise<void> {
             type: "boolean",
             description: "Fetch public config",
         })
+        .options("method", {
+            alias: "m",
+            type: "string",
+            description: "ServiceClient method to call",
+        })
         .argv;
     // make sure we have a username & password
     if (!argv.token && (!argv.username || !argv.password)) {
@@ -86,7 +91,7 @@ async function main(): Promise<void> {
         try {
             await client.login();
             console.log(`Bearer ${client.token()}`);
-        } catch (err) {
+        } catch (err: any) {
             console.error("error", err.message)
         }
         return;
@@ -98,6 +103,15 @@ async function main(): Promise<void> {
     // don't bother doing anything if there are no ids to process
     if (argv._.length === 0) {
         console.error("no ids provided");
+        return;
+    }
+    if (argv.method) {
+        const data = await client.method(argv.method, ...argv._);
+        if (argv.format) {
+            console.log(JSON.stringify(data, null, 2));
+        } else {
+            console.log(JSON.stringify(data));
+        }
         return;
     }
     // treat each positional argument as an id
@@ -145,7 +159,7 @@ async function main(): Promise<void> {
             } else {
                 console.log(JSON.stringify(data));
             }
-        } catch (err) {
+        } catch (err: any) {
             console.error("error:", err.message, `raw=${arg}`);
         }
     }
