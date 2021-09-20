@@ -102,10 +102,10 @@ export class Ap3Client {
             }
             return arg;
         });
-        // add request options
-        const options: RequestOptions = { token: this.token() };
-        args_.push(options);
-        return method.call(api, args_);
+        return method.call(api, ...args_, {
+            token: this.token(),
+            debug: true,
+        } as RequestOptions);
     }
 
     methods(): Method[] {
