@@ -1,7 +1,7 @@
 import ID from "@compassdigital/id";
 import { DecodedID } from "@compassdigital/id/interface";
 import fetch from "node-fetch";
-import { ServiceClient } from "@compassdigital/sdk.typescript";
+import { RequestOptions, ServiceClient } from "@compassdigital/sdk.typescript";
 import { GetUserAuthResponse } from "@compassdigital/sdk.typescript/interface/user";
 import { funcArgs } from "./funcargs";
 
@@ -83,21 +83,29 @@ export class Ap3Client {
     }
 
     async method(name: string, ...args: (string|number)[]): Promise<any> {
+        if (!this.auth) {
+            await this.login();
+        }
         const api: any = this.api;
         const method: Function = api[name];
         if (typeof method !== "function") {
             throw new Error(`Invalid method name: ${name}`);
         }
-        const methodArgs = funcArgs(method).slice(0, -1);
-        if (methodArgs.length !== args.length) {
-            throw new Error(`expected ${methodArgs.length} args: (${methodArgs.join(", ")}), recieved ${args.length}`);
+        const signature = funcArgs(method).slice(0, -1);
+        if (signature.length !== args.length) {
+            throw new Error(`expected ${signature.length} args: (${signature.join(", ")}), recieved ${args.length}`);
         }
-        return method.call(api, args.map((arg, i) => {
-            if (methodArgs[i] === "body" && typeof arg === "string") {
+        // parse body param as json
+        const args_: any[] = args.map((arg, i) => {
+            if (signature[i] === "body" && typeof arg === "string") {
                 return JSON.parse(arg);
             }
             return arg;
-        }));
+        });
+        // add request options
+        const options: RequestOptions = { token: this.token() };
+        args_.push(options);
+        return method.call(api, args_);
     }
 
     methods(): Method[] {
