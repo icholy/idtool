@@ -106,11 +106,15 @@ async function main(): Promise<void> {
         return;
     }
     if (argv.method) {
-        const data = await client.method(argv.method, ...argv._);
-        if (argv.format) {
-            console.log(JSON.stringify(data, null, 2));
-        } else {
-            console.log(JSON.stringify(data));
+        try {
+            const data = await client.method(argv.method, ...argv._);
+            if (argv.format) {
+                console.log(JSON.stringify(data, null, 2));
+            } else {
+                console.log(JSON.stringify(data));
+            }
+        } catch (err: any) {
+            console.error("error", err.message);
         }
         return;
     }
