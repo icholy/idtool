@@ -79,13 +79,25 @@ async function main(): Promise<void> {
             type: "string",
             description: "ServiceClient method to call",
         })
+        .options("list", {
+            alias: "l",
+            type: "boolean",
+            description: "List ServiceClient methods",
+        })
         .argv;
+    // create a client and use it to fetch the id's json
+    const client = new Ap3Client(argv.username ?? "", argv.password ?? "", argv.env);
+    // list methods if requested
+    if (argv.list) {
+        for (const method of client.methods()) {
+            console.log(`${method.name}(${method.args.join(",")})`);
+        }
+        return;
+    }
     // make sure we have a username & password
     if (!argv.token && (!argv.username || !argv.password)) {
         console.error(`--username and --password must be set`);
     }
-    // create a client and use it to fetch the id's json
-    const client = new Ap3Client(argv.username ?? "", argv.password ?? "", argv.env);
     // login and output the token if that's what was requested.
     if (argv.token) {
         try {

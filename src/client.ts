@@ -11,6 +11,11 @@ export interface FetchOptions {
     extended?: boolean;
 }
 
+interface Method {
+    name: string;
+    args: string[];
+}
+
 export class Ap3Client {
     private auth?: GetUserAuthResponse;
     private api: ServiceClient;
@@ -93,6 +98,21 @@ export class Ap3Client {
             }
             return arg;
         }));
+    }
+
+    methods(): Method[] {
+        const methods: Method[] = [];
+        const api: any = this.api;
+        for (const name of api) {
+            if (typeof api[name] !== "function" && name !== "request" && name !== "_request") {
+                continue;
+            }
+            methods.push({
+                name: name,
+                args: funcArgs(api[name]),
+            });
+        }
+        return methods;
     }
 
     // fetch the provided url.
