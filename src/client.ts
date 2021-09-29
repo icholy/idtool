@@ -2,7 +2,7 @@ import ID from "@compassdigital/id";
 import { DecodedID } from "@compassdigital/id/interface";
 import fetch from "node-fetch";
 import { RequestOptions, ServiceClient } from "@compassdigital/sdk.typescript";
-import { GetUserAuthResponse } from "@compassdigital/sdk.typescript/interface/user";
+import { GetUserAuthResponse, User } from "@compassdigital/sdk.typescript/interface/user";
 import { funcArgs } from "./funcargs";
 
 export interface FetchOptions {
@@ -22,6 +22,11 @@ export class Ap3Client {
 
     constructor(private username: string, private password: string, private env = "dev") {
         this.api = new ServiceClient({ stage: env });
+    }
+
+    // get the user info
+    user(): User|undefined {
+        return this.auth?.profile;
     }
 
     // token returns the session token for external use.

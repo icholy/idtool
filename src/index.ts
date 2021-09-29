@@ -1,5 +1,4 @@
 import ID from "@compassdigital/id";
-import { DecodedID } from "@compassdigital/id/interface";
 import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
 import { Ap3Client, FetchOptions } from "./client";
@@ -105,6 +104,7 @@ async function main(): Promise<void> {
         try {
             await client.login();
             console.log(`Bearer ${client.token()}`);
+            console.log(JSON.stringify(client.user(), null, 2))
         } catch (err: any) {
             console.error("error:", err.message)
         }
