@@ -104,6 +104,7 @@ async function main(): Promise<void> {
         try {
             await client.login();
             console.log(`Bearer ${client.token()}`);
+            console.log();
             console.log(JSON.stringify(client.user(), null, 2))
         } catch (err: any) {
             console.error("error:", err.message)
